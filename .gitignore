@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 
+# cursor
 .cursor/
 .claude/
 
