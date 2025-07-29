@@ -389,16 +389,16 @@ export async function addContactAndSendWelcomeEmail(
   const contactResult = await smartAddContactToSendGrid(contact, listId)
 
   // If user is already in contact list, they've been welcomed before - skip email
-  if (contactResult.success && contactResult.message === 'Already in contact list!') {
-    return {
-      contactAdded: contactResult,
-      emailSent: {
-        success: true,
-        message: 'Welcome email skipped - user already welcomed'
-      },
-      overallSuccess: true
-    }
-  }
+  // if (contactResult.success && contactResult.message === 'Already in contact list!') {
+  //   return {
+  //     contactAdded: contactResult,
+  //     emailSent: {
+  //       success: true,
+  //       message: 'Welcome email skipped - user already welcomed'
+  //     },
+  //     overallSuccess: true
+  //   }
+  // }
 
   // Send welcome email to new contacts only
   const emailResult = await sendWelcomeEmail(emailData, templateId)
