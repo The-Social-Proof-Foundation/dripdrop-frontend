@@ -1,18 +1,27 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Mail, Loader2 } from "lucide-react"
 import { addContactAndSendWelcomeEmail } from "@/lib/sendgrid"
 import { toast } from "sonner"
 import Link from "next/link"
+import Image from "next/image"
+import { useTheme } from "next-themes"
 
 export function EmailSignup() {
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isValid, setIsValid] = useState(true)
   const [message, setMessage] = useState("")
+  const [mounted, setMounted] = useState(false)
+  const { theme, resolvedTheme } = useTheme()
+
+  // Handle hydration
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -55,10 +64,14 @@ export function EmailSignup() {
     }
   }
 
+  // Determine MySo logo based on theme with proper fallback
+  const currentTheme = mounted ? (resolvedTheme || theme || 'light') : 'light'
+  const mysoLogo = currentTheme === 'light' ? '/MySo-logo-black.png' : '/MySo-logo-white.png'
+
   return (
     <div className="flex flex-col gap-4 w-full max-w-xl mx-auto">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1 min-w-[340px] md:min-w-[260px] lg:min-w-[280px]">
             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
@@ -85,9 +98,7 @@ export function EmailSignup() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing up...
               </>
-            ) : (
-              "Notify Me"
-            )}
+            ) : ("Notify Me")}
           </Button>
         </div>
         <div className="text-xs text-muted-foreground/75 text-center">Enter your email to reserve your TestFlight invite</div>
@@ -100,9 +111,10 @@ export function EmailSignup() {
       
       {/* Social Icons */}
       <div className="flex justify-center items-center gap-6 mt-2">
+        {/* Telegram */}
         <Link 
           href="https://t.me/dripdrop_social"
-          className="transition-colors duration-300 hover:text-foreground opacity-70 hover:opacity-100"
+          className="transition-colors duration-300 hover:text-foreground opacity-60 hover:opacity-100"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -112,9 +124,10 @@ export function EmailSignup() {
           </svg>
         </Link>
 
+        {/* X */}
         <Link 
           href="https://x.com/dripdrop_social"
-          className="transition-colors duration-300 hover:text-foreground opacity-70 hover:opacity-100"
+          className="transition-colors duration-300 hover:text-foreground opacity-60 hover:opacity-100"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -122,6 +135,22 @@ export function EmailSignup() {
             <title>X</title>
             <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
           </svg>
+        </Link>
+
+        {/* MySo Logo */}
+        <Link 
+          href="https://www.mysocial.network/ecosystem/dripdrop"
+          className="transition-all duration-300 hover:opacity-100 opacity-60"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src={mysoLogo}
+            alt="MySocial Network"
+            width={20}
+            height={20}
+            className="object-contain"
+          />
         </Link>
       </div>
     </div>

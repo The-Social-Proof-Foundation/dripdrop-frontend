@@ -44,17 +44,17 @@ export default function Home() {
         ) : null}
         
         {/* Content Overlaid on Spline Scene */}
-        <div className="absolute inset-0 -translate-y-[2vh] pointer-events-none">
+        <div className="absolute inset-0 -translate-y-[6vh] pointer-events-none">
           <div className="flex flex-col items-center justify-center text-center px-4 h-full">
             {/* Hero Text */}
-            <div className="mb-8 md:mb-12 lg:mb-16">
-                <h1 className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl mb-4 md:mb-6 lg:mb-8 text-foreground select-text pointer-events-auto">
+            <div className="mb-8 md:mb-12 lg:mb-6">
+                {/* <h1 className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl mb-4 md:mb-6 lg:mb-8 text-foreground select-text pointer-events-auto">
                   Short-form videos,
                   <br />  
                   <span className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl">that you actually own.</span>
-                </h1>
+                </h1> */}
 
-                <p className="font-quicksand font-semibold text-sm md:text-base text-muted-foreground mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
+                <p className="font-quicksand font-semibold text-sm md:text-base text-primary mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
                   We&apos;re building the most fun 12-second video economy, all on-chain. <br className="hidden md:inline" />Featuring Social Proof Tokens, fair ownership, & unlimited ways to earn.
                 </p>
             </div>
