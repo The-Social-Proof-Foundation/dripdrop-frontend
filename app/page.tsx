@@ -55,7 +55,7 @@ export default function Home() {
                 </h1>
 
                 <p className="font-quicksand font-semibold text-sm md:text-base text-muted-foreground mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
-                  We&apos;re building the most fun 12-second looping video economy, all on-chain. <br className="hidden md:inline" />Featuring Social Proof Tokens, fair ownership, & unlimited ways to earn. <br /> Coming soon on iOS.
+                  We&apos;re building the most fun 12-second video economy, all on-chain. <br className="hidden md:inline" />Featuring Social Proof Tokens, fair ownership, & unlimited ways to earn.
                 </p>
             </div>
 
