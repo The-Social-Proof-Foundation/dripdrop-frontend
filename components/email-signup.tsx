@@ -69,7 +69,7 @@ export function EmailSignup() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full max-w-xl mx-auto" >
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1 min-w-[340px] md:min-w-[300px] lg:min-w-[320px]">
+        <div className="relative flex-1 min-w-[340px] md:min-w-[260px] lg:min-w-[280px]">
           <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="email"

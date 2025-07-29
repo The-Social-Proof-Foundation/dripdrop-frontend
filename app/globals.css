@@ -2,12 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Font imports - easily add/remove fonts here */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+/* Font imports - only for fonts not optimized by Next.js */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
 
-/* QuickSand font with specific weights: light, regular, medium, semi-bold, bold, extrabold */
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700;800&display=swap');
+/* Next.js optimized fonts (Quicksand and Inter) are loaded in layout.tsx */
+/* This ensures better Safari compatibility and faster loading */
+
+/* Safari-specific font display optimization */
+@supports (font-variation-settings: normal) {
+  .font-quicksand {
+    font-feature-settings: 'kern' 1;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Ensure fonts display during loading (Safari compatibility) */
+.font-quicksand {
+  font-display: swap;
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
