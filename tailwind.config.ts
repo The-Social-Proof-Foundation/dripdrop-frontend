@@ -21,8 +21,7 @@ const config: Config = {
         'heading': ['Inter', 'system-ui', 'sans-serif'],
         
         // Custom fonts (add your branded fonts here)
-        // 'brand': ['YourBrandFont', 'Inter', 'sans-serif'],
-        // 'accent': ['YourAccentFont', 'Inter', 'sans-serif'],
+        'quicksand': ['Quicksand', 'Inter', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

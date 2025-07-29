@@ -2,6 +2,7 @@
 
 import { AnimatedThemeToggle } from "@/components/animated-theme-toggle"
 import Link from "next/link"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -10,11 +11,15 @@ export function Footer() {
         <div className="flex flex-col mb-8 lg:mb-6">
           {/* Logo centered at top */}
           <div className="flex justify-center items-center mb-2">
-            <Link href="/" className="flex flex-col items-center space-y-3 group">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <div className="w-5 h-5 bg-background rounded"></div>
-              </div>
-              <span className="hidden lg:inline text-xl font-semibold transition-all">
+            <Link href="/" className="flex flex-col items-center space-y-2 group">
+              <Image 
+                src="/DripDrop-logo-readme.png" 
+                alt="DripDrop Logo" 
+                width={42}
+                height={42}
+                className="object-contain"
+              />
+              <span className="hidden lg:inline text-xl font-quicksand font-bold transition-all">
                 DripDrop
               </span>
             </Link>
@@ -29,9 +34,9 @@ export function Footer() {
              </div>
 
              {/* Social Icons - Above center content on mobile, right side on desktop */}
-             <div className="flex gap-4 pb-4 sm:pt-0 order-2 sm:order-3">
+             <div className="flex gap-6 pb-4 sm:pt-0 order-2 sm:order-3">
                <Link 
-                 href="https://t.me/yourcompany"
+                 href="https://t.me/dripdrop_social"
                  className="transition-colors duration-300 hover:text-foreground"
                  target="_blank"
                  rel="noopener noreferrer"
@@ -43,7 +48,7 @@ export function Footer() {
                </Link>
 
                <Link 
-                 href="https://x.com/yourcompany"
+                 href="https://x.com/dripdrop_social"
                  className="transition-colors duration-300 hover:text-foreground"
                  target="_blank"
                  rel="noopener noreferrer"
@@ -58,16 +63,16 @@ export function Footer() {
              {/* Center - Terms and Privacy - Absolutely centered */}
              <div className="flex flex-col items-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 order-3 sm:order-2">
                <div className="flex gap-6 text-xs mb-2">
-                 <Link href="/terms" className="hover:underline text-primary transition-colors duration-300">
+                 <Link href="/terms" className="hover:underline text-primary transition-colors duration-300 font-medium hover:font-semibold">
                    Terms of Service
                  </Link>
-                 <Link href="/privacy" className="hover:underline text-primary transition-colors duration-300">
+                 <Link href="/privacy" className="hover:underline text-primary transition-colors duration-300 font-medium hover:font-semibold">
                    Privacy Policy
                  </Link>
                </div>
 
                <p className="text-xs text-muted-foreground">
-                 © Copyright {new Date().getFullYear()}. All Rights Reserved.
+                 © Copyright {new Date().getFullYear()}. <Link href="https://socialproof.foundation" target="_blank" rel="noopener noreferrer" className="hover:underline hover:font-medium">The Social Proof Foundation, LLC.</Link> All Rights Reserved.
                </p>
              </div>
           </div>

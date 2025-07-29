@@ -1,91 +1,74 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import Image from "next/image"
-import { gsap } from "gsap"
+import { useState } from "react"
+import Script from "next/script"
 import { Footer } from "@/components/footer"
-import { CountdownTimer } from "@/components/countdown-timer"
 import { EmailSignup } from "@/components/email-signup"
-import { HeroBadge } from "@/components/ui/hero-badge"
-import { Sparkle } from "lucide-react"
 
 export default function Home() {
-  const titleRef = useRef<HTMLHeadingElement>(null)
+  const [splineLoaded, setSplineLoaded] = useState(false)
+  const [splineError, setSplineError] = useState(false)
 
-  // Set launch date (30 days from now for demo)
-  const launchDate = new Date()
-  launchDate.setDate(launchDate.getDate() + 30)
 
-  useEffect(() => {
-    // Initial hero animation
-    if (titleRef.current) {
-      gsap.set(titleRef.current, { y: 100, opacity: 0 })
-      gsap.to(titleRef.current, {
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power3.out"
-      })
-    }
-  }, [])
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
-      {/* Background */}
-      <div className="fixed inset-0 bg-background" />
-
-      {/* Main Content */}
-      <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Coming Soon Badge - Fixed at top */}
-        <div className="mt-[5vh] mb-16 text-center">
-          <HeroBadge
-            href="https://www.mysocial.network/MySocial.pdf"
-            text="Coming Soon"
-            endIcon={<Sparkle className="ml-2 w-4 h-4 arrow-icon" />}
-            variant="default"
-            size="md"
-            className="shadow-lg shadow-black/20 hero-badge"
-            showCountdown={true}
-            targetDate={launchDate}
+    <main className="min-h-screen relative">
+      {/* Spline 3D Scene - Hugging the top */}
+      <div className="w-full h-screen relative">
+        <Script 
+          type="module" 
+          src="https://cdn.spline.design/@splinetool/hana-viewer@1.0.57/hana-viewer.js"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+          onLoad={() => {
+            setSplineLoaded(true);
+            // Add error handling for the hana-viewer element
+            setTimeout(() => {
+              const viewer = document.querySelector('hana-viewer');
+              if (viewer) {
+                viewer.addEventListener('error', () => setSplineError(true));
+              }
+            }, 1000);
+          }}
+          onError={() => {
+            setSplineError(true);
+          }}
+        />
+        {!splineError && splineLoaded ? (
+          <div 
+            className="w-full h-full"
+            dangerouslySetInnerHTML={{ 
+              __html: '<hana-viewer url="https://prod.spline.design/ZzY5p7kxLBdROiqY-hxL/scene.hanacode" style="width: 100%; height: 100%; display: block;"></hana-viewer>' 
+            }} 
           />
-        </div>
+        ) : null}
         
-        {/* Main Content - Centered */}
-        <div className="flex-1 flex flex-col items-center justify-center text-center max-w-4xl mx-auto min-h-[75vh]">
-          {/* Logo/Brand Area */}
-          <div className="mb-8">
-            <div className="w-20 h-20 mx-auto flex items-center justify-center">
-              <Image
-                src="/DripDrop-logo-readme.png"
-                alt="DripDrop Logo"
-                width={80}
-                height={80}
-                className="rounded-lg"
-                priority
-              />
+        {/* Content Overlaid on Spline Scene */}
+        <div className="absolute inset-0 -translate-y-[2vh] pointer-events-none">
+          <div className="flex flex-col items-center justify-center text-center px-4 h-full">
+            {/* Hero Text */}
+            <div className="mb-8 md:mb-12 lg:mb-16">
+                <h1 className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl mb-4 md:mb-6 lg:mb-8 text-foreground select-text pointer-events-auto">
+                  Short-form videos,
+                  <br />  
+                  <span className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl">that you actually own.</span>
+                </h1>
+
+                <p className="font-quicksand font-semibold text-sm md:text-base text-muted-foreground mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
+                  We&apos;re building the most fun 12-second looping video economy, all on-chain. <br className="hidden md:inline" />Featuring Social Proof Tokens, fair ownership, & unlimited ways to earn. <br /> Coming soon on iOS.
+                </p>
+            </div>
+
+            {/* Email Signup */}
+            <div className="pointer-events-auto">
+              <EmailSignup />
             </div>
           </div>
-
-          {/* Hero Text */}
-          <h1 ref={titleRef} className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground leading-tight">
-            Something Amazing
-            <br />
-            <span className="text-3xl md:text-5xl lg:text-6xl">is Coming Soon</span>
-          </h1>
-
-          <p className="text-sm md:text-base text-muted-foreground mb-12 max-w-md md:max-w-xl mx-auto leading-relaxed">
-            We&apos;re crafting an extraordinary experience that will revolutionize the way you think about digital innovation.
-          </p>
-
-          {/* Email Signup */}
-          <div className="mb-[30vh] mt-12">
-            <EmailSignup />
-          </div>
         </div>
-
-        {/* Footer */}
-        <Footer />
       </div>
+
+      {/* Footer */}
+      <Footer />
     </main>
   )
 }

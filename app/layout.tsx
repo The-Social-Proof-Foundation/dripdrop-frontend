@@ -1,13 +1,11 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import GoogleAnalytics from '@/lib/googleAnalytics'
-import { Inter } from 'next/font/google';
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from '@/components/theme-provider';
 import { ApolloWrapper } from '@/lib/apollo-provider';
 import { CookieConsent } from '@/components/cookie-consent';
 import ThemeFavicon from '@/components/theme-favicon';
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'DripDrop - Coming Soon',
@@ -21,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body suppressHydrationWarning>
         {/* <ApolloWrapper> */}
             <ThemeProvider
               attribute="class"
