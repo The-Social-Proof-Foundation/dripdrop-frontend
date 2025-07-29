@@ -1,3 +1,5 @@
+'use server'
+
 // SendGrid utilities for both contact management and transactional emails
 // Handles adding users to contact lists AND sending welcome emails
 
