@@ -3,12 +3,13 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Mail, Check, Loader2 } from "lucide-react"
+import { Mail, Loader2 } from "lucide-react"
 import { addContactAndSendWelcomeEmail } from "@/lib/sendgrid"
+import { toast } from "sonner"
+import Link from "next/link"
 
 export function EmailSignup() {
   const [email, setEmail] = useState("")
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isValid, setIsValid] = useState(true)
   const [message, setMessage] = useState("")
@@ -33,9 +34,14 @@ export function EmailSignup() {
       const result = await addContactAndSendWelcomeEmail(email)
       
       if (result.overallSuccess) {
-        setIsSubmitted(true)
-        setMessage("Successfully subscribed!")
+        // Show professional toast notification
+        toast.success("🎉 You're all set!", {
+          description: "Welcome to DripDrop! Check your email for exclusive updates.",
+          duration: 4000,
+        })
+        
         setEmail("")
+        setMessage("")
       } else {
         setMessage("Something went wrong. Please try again.")
         setIsValid(false)
@@ -47,65 +53,77 @@ export function EmailSignup() {
     } finally {
       setIsLoading(false)
     }
-    
-    // Reset success message after 5 seconds
-    if (isSubmitted) {
-      setTimeout(() => {
-        setIsSubmitted(false)
-        setMessage("")
-      }, 5000)
-    }
-  }
-
-  if (isSubmitted) {
-    return (
-      <div className="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg border border-green-200 dark:border-green-800">
-        <Check className="w-5 h-5" />
-        <span>{message}</span>
-      </div>
-    )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full max-w-xl mx-auto" >
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1 min-w-[340px] md:min-w-[260px] lg:min-w-[280px]">
-          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            type="email"
-            placeholder="email address"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-              setIsValid(true)
-            }}
-            className={`pl-10 ${
-              !isValid ? "border-red-500 focus:border-red-500" : ""
-            }`}
-            required
-          />
+    <div className="flex flex-col gap-4 w-full max-w-xl mx-auto">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1 min-w-[340px] md:min-w-[260px] lg:min-w-[280px]">
+            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="email"
+              placeholder="email address"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                setIsValid(true)
+              }}
+              className={`pl-10 ${
+                !isValid ? "border-red-500 focus:border-red-500" : ""
+              }`}
+              required
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Signing up...
+              </>
+            ) : (
+              "Notify Me"
+            )}
+          </Button>
         </div>
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground"
+        <div className="text-xs text-muted-foreground/75 text-center">Enter your email to reserve your TestFlight invite</div>
+        {!isValid && (
+          <p className="text-red-500 text-sm mt-1">
+            {message || "Please enter a valid email address"}
+          </p>
+        )}
+      </form>
+      
+      {/* Social Icons */}
+      <div className="flex justify-center items-center gap-6 mt-2">
+        <Link 
+          href="https://t.me/dripdrop_social"
+          className="transition-colors duration-300 hover:text-foreground opacity-70 hover:opacity-100"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Signing up...
-            </>
-          ) : (
-            "Notify Me"
-          )}
-        </Button>
+          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 fill-current">
+            <title>Telegram</title>
+            <path d="m20.665 3.717-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z" />
+          </svg>
+        </Link>
+
+        <Link 
+          href="https://x.com/dripdrop_social"
+          className="transition-colors duration-300 hover:text-foreground opacity-70 hover:opacity-100"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-[18px] w-[18px] fill-current">
+            <title>X</title>
+            <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+          </svg>
+        </Link>
       </div>
-      <div className="text-xs text-muted-foreground text-center">Enter your email to get notified when we launch</div>
-      {!isValid && (
-        <p className="text-red-500 text-sm mt-1">
-          {message || "Please enter a valid email address"}
-        </p>
-      )}
-    </form>
+    </div>
   )
 }
