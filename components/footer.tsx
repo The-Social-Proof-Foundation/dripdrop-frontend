@@ -10,8 +10,7 @@ export function Footer() {
       <div className="w-full py-6 px-8">
         <div className="flex flex-col mb-4 lg:mb-6">
           {/* Logo centered at top */}
-          <div className="flex justify-center items-center mb-2 md:mb-0">
-            <Link href="/" className="flex flex-col items-center space-y-2 group">
+          <div className="flex flex-col items-center mb-2 gap-2 md:mb-0">
               {/* Silhouette logo - always visible */}
               <ThemeLogo 
                 type="silhouette"
@@ -27,7 +26,6 @@ export function Footer() {
                 className="hidden sm:block"
                 alt="DripDrop Brand"
               />
-            </Link>
           </div>
         </div>
 
@@ -40,7 +38,7 @@ export function Footer() {
 
              {/* Center - Terms and Privacy - Mobile: centered, Desktop: absolutely centered */}
              <div className="flex flex-col items-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 order-2 sm:order-2">
-               <div className="flex gap-4 text-xs mb-2 md:mb-0">
+               <div className="flex gap-4 text-xs mb-2 md:mb-0 translate-y-0 md:translate-y-2">
                  <Link href="https://docs.google.com/document/d/1qxKECZAOfgaZxl49Y3PhP9oAxB1yOsKJLasPEU-b6GY/" className="hover:underline text-primary transition-colors duration-300 font-medium hover:font-semibold">
                    Terms of Service
                  </Link>
