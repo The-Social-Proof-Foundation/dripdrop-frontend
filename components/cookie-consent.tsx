@@ -54,7 +54,7 @@ export function CookieConsent() {
               setShowConsent(false)
             }
           }}
-          className="fixed bottom-4 md:bottom-6 left-4 right-4 md:right-6 md:left-auto z-50 max-w-[500px] md:max-w-[400px] mx-auto md:mx-0 border border-[var(--border)] rounded-lg shadow-[0_6px_16px_rgba(0,0,0,0.15)]"
+          className="fixed bottom-4 md:bottom-6 left-4 right-4 md:right-6 md:left-auto z-50 max-w-[500px] md:max-w-[400px] mx-auto md:mx-0 border border-[var(--muted-foreground)]/50 rounded-lg shadow-[0_6px_16px_rgba(0,0,0,0.15)]"
         >
           <div className="bg-[var(--background-transparent)] backdrop-blur supports-[backdrop-filter]:bg-[var(--background-transparent)] rounded-lg p-4 flex items-center justify-between gap-4">
             <Button 
@@ -63,7 +63,7 @@ export function CookieConsent() {
             >
               {region === 'EU' ? 'Accept' : 'Okay'}
             </Button>
-            <p className="text-sm text-[var(--primary)]">
+            <p className="text-xs text-[var(--primary)] font-quicksand font-medium">
               {getMessage()}
             </p>
           </div>
