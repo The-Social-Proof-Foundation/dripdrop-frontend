@@ -62,7 +62,7 @@ export function Footer() {
 
              {/* Center - Terms and Privacy - Absolutely centered */}
              <div className="flex flex-col items-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 order-3 sm:order-2">
-               <div className="flex gap-6 text-xs mb-2">
+               <div className="flex gap-4 text-xs mb-1">
                  <Link href="/terms" className="hover:underline text-primary transition-colors duration-300 font-medium hover:font-semibold">
                    Terms of Service
                  </Link>
@@ -71,9 +71,14 @@ export function Footer() {
                  </Link>
                </div>
 
-               <p className="text-xs text-muted-foreground">
-                 © Copyright {new Date().getFullYear()}. <Link href="https://socialproof.foundation" target="_blank" rel="noopener noreferrer" className="hover:underline hover:font-medium">The Social Proof Foundation, LLC.</Link> All Rights Reserved.
-               </p>
+               <div className="text-center">
+                 <Link href="https://socialproof.foundation" target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:underline hover:font-medium block">
+                   The Social Proof Foundation, LLC.
+                 </Link>
+                 <p className="text-xs text-muted-foreground">
+                   © Copyright {new Date().getFullYear()}. All Rights Reserved.
+                 </p>
+               </div>
              </div>
           </div>
         </div>
