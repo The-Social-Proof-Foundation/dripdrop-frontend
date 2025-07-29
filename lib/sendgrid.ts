@@ -1,5 +1,3 @@
-'use server'
-
 // SendGrid utilities for both contact management and transactional emails
 // Handles adding users to contact lists AND sending welcome emails
 
@@ -193,8 +191,8 @@ export async function sendWelcomeEmail(
     // Prepare email data with anti-spam headers
     const emailPayload = {
       from: {
-        email: process.env.SENDGRID_FROM_EMAIL || 'brandon@mysocial.network',
-        name: process.env.SENDGRID_FROM_NAME || 'MySocial'
+        email: process.env.SENDGRID_FROM_EMAIL || 'brandon@dripdrop.social',
+        name: process.env.SENDGRID_FROM_NAME || 'DripDrop'
       },
       personalizations: [
         {
@@ -211,13 +209,13 @@ export async function sendWelcomeEmail(
             email: emailData.email,
             signup_date: new Date().toLocaleDateString(),
             signup_timestamp: new Date().toISOString(),
-            unsubscribe_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mysocial.network'}/unsubscribe?email=${encodeURIComponent(emailData.email)}`
+            unsubscribe_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/unsubscribe?email=${encodeURIComponent(emailData.email)}`
           }
         }
       ],
       // Add headers to improve deliverability
       headers: {
-        'List-Unsubscribe': `<${process.env.NEXT_PUBLIC_BASE_URL || 'https://mysocial.network'}/unsubscribe?email=${encodeURIComponent(emailData.email)}>`,
+        'List-Unsubscribe': `<${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/unsubscribe?email=${encodeURIComponent(emailData.email)}>`,
         'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
         'X-Priority': '3',
         'X-MSMail-Priority': 'Normal',
