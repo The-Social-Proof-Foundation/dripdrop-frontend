@@ -23,7 +23,7 @@ export default function RootLayout({
         {/* <ApolloWrapper> */}
             <ThemeProvider
               attribute="class"
-              defaultTheme="dark"
+              defaultTheme="light"
               enableSystem
               disableTransitionOnChange={false}
             >
