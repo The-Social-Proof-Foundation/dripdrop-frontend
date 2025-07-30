@@ -18,7 +18,7 @@ const nextConfig = {
     ]
   },
   // Ensure API routes work properly in production
-  serverExternalPackages: ['@sendgrid/mail'],
+  serverExternalPackages: ['resend'],
   // Webpack configuration to fix module loading issues
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Fix for __webpack_modules__ issues

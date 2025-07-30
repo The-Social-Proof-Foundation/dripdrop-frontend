@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Mail, Loader2 } from "lucide-react"
-import { addContactAndSendWelcomeEmail } from "@/lib/sendgrid"
 import { toast } from "sonner"
 import Link from "next/link"
 import Image from "next/image"
@@ -40,9 +39,17 @@ export function EmailSignup() {
     setIsLoading(true)
     
     try {
-      const result = await addContactAndSendWelcomeEmail(email)
+      const response = await fetch('/api/email-signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email })
+      })
+
+      const result = await response.json()
       
-      if (result.overallSuccess) {
+      if (response.ok && result.success) {
         // Show professional toast notification
         toast.success("🎉 You're all set!", {
           description: "Welcome to DripDrop! Check your email for exclusive updates.",
@@ -52,7 +59,7 @@ export function EmailSignup() {
         setEmail("")
         setMessage("")
       } else {
-        setMessage("Something went wrong. Please try again.")
+        setMessage(result.error || "Something went wrong. Please try again.")
         setIsValid(false)
       }
     } catch (error) {

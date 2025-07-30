@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   const envStatus = {
-    sendgridApiKey: !!process.env.SENDGRID_API_KEY,
-    sendgridFromEmail: !!process.env.SENDGRID_FROM_EMAIL,
-    sendgridFromName: !!process.env.SENDGRID_FROM_NAME,
-    sendgridContactListId: !!process.env.SENDGRID_CONTACT_LIST_ID,
-    sendgridWelcomeTemplateId: !!process.env.SENDGRID_WELCOME_TEMPLATE_ID,
+    resendApiKey: !!process.env.RESEND_API_KEY,
+    resendFromEmail: !!process.env.RESEND_FROM_EMAIL,
+    resendFromName: !!process.env.RESEND_FROM_NAME,
+    resendAudienceId: !!process.env.RESEND_AUDIENCE_ID,
     baseUrl: !!process.env.NEXT_PUBLIC_BASE_URL,
   }
 

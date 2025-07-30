@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { addContactAndSendWelcomeEmail } from '@/lib/sendgrid'
+import { addContactAndSendWelcomeEmail } from '@/lib/resend'
 
 // Rate limiting map (in production, use Redis or database)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
   console.log(`📧 Email signup request from IP: ${ip}`)
   
   // Environment check for production readiness
-  if (!process.env.SENDGRID_API_KEY || !process.env.SENDGRID_FROM_EMAIL) {
+  if (!process.env.RESEND_API_KEY || !process.env.RESEND_FROM_EMAIL) {
     console.error('❌ Missing required environment variables for email service')
     return NextResponse.json(
       { error: 'Email service not configured' },
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Call the sendgrid function with timeout
+    // Call the resend function with timeout
     console.log(`📤 Processing signup for: ${cleanEmail}`)
     
     const timeoutPromise = new Promise((_, reject) => 
@@ -134,7 +134,7 @@ export async function POST(req: NextRequest) {
 
     // Validate response structure
     if (!result || typeof result.overallSuccess !== 'boolean') {
-      console.error('Invalid response from sendgrid function:', result)
+      console.error('Invalid response from resend function:', result)
       return NextResponse.json(
         { error: 'Service temporarily unavailable' },
         { status: 503 }

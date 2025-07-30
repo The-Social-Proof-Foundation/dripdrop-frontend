@@ -9,7 +9,7 @@ import { Transaction } from '@socialproof/mys/transactions'
 import { getMysClient } from '@/lib/myso-client'
 import { fromB64 } from '@socialproof/mys/utils'
 import * as bip39 from 'bip39'
-import { processGoogleAuthUser } from '@/lib/sendgrid'
+import { processEmailSignup } from '@/lib/resend'
 
 // Auth method type - added 'base' for Base network wallet connections and 'imported' for imported wallets
 type AuthMethod = 'google' | 'imported' | 'base' | 'wallet' | null
@@ -354,7 +354,7 @@ export function useUniversalAuth(): UniversalAuthState {
       isProcessingWelcomeEmail.current = true
 
       try {
-        const result = await processGoogleAuthUser(
+        const result = await processEmailSignup(
           googleUserInfo.email,
           googleUserInfo.given_name,
           googleUserInfo.family_name
