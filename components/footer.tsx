@@ -39,10 +39,10 @@ export function Footer() {
              {/* Center - Terms and Privacy - Mobile: centered, Desktop: absolutely centered */}
              <div className="flex flex-col items-center sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 order-2 sm:order-2">
                <div className="flex gap-4 text-xs mb-2 md:mb-0 translate-y-0 md:translate-y-2">
-                 <Link href="https://docs.google.com/document/d/1qxKECZAOfgaZxl49Y3PhP9oAxB1yOsKJLasPEU-b6GY/" className="hover:underline text-primary transition-colors duration-300 font-medium hover:font-semibold">
+                 <Link href="https://docs.google.com/document/d/1qxKECZAOfgaZxl49Y3PhP9oAxB1yOsKJLasPEU-b6GY/" className="hover:underline text-muted-foreground transition-colors duration-300 font-medium hover:font-semibold">
                    Terms of Service
                  </Link>
-                 <Link href="https://docs.google.com/document/d/1_lFu0GsqmcsyiuKrlGF-RBz6nd4Gm3vGluxhALiXYQA/" className="hover:underline text-primary transition-colors duration-300 font-medium hover:font-semibold">
+                 <Link href="https://docs.google.com/document/d/1_lFu0GsqmcsyiuKrlGF-RBz6nd4Gm3vGluxhALiXYQA/" className="hover:underline text-muted-foreground transition-colors duration-300 font-medium hover:font-semibold">
                    Privacy Policy
                  </Link>
                </div>
