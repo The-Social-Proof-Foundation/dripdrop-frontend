@@ -54,7 +54,7 @@ export default function Home() {
                   <span className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl">that you actually own.</span>
                 </h1> */}
 
-                <p className="font-quicksand font-semibold pt-[140px] md:pt-0 text-sm md:text-base text-primary mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
+                <p className="font-quicksand font-semibold pt-[140px] md:pt-0 text-sm md:text-base text-muted-foreground mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
                   We&apos;re building the most fun 12-second video economy, all on-chain. <br className="hidden md:inline" />Featuring Social Proof Tokens, fair ownership, & unlimited ways to earn.
                 </p>
             </div>
