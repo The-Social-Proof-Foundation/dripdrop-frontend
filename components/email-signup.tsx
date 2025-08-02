@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Mail, Loader2 } from "lucide-react"
+import { Mail, Loader2, Check } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import Image from "next/image"
@@ -11,6 +11,7 @@ import { useTheme } from "next-themes"
 
 export function EmailSignup() {
   const [email, setEmail] = useState("")
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isValid, setIsValid] = useState(true)
   const [message, setMessage] = useState("")
@@ -58,6 +59,7 @@ export function EmailSignup() {
         
         setEmail("")
         setMessage("")
+        setIsSubmitted(true)
       } else {
         setMessage(result.error || "Something went wrong. Please try again.")
         setIsValid(false)

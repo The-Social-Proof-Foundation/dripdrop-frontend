@@ -1,6 +1,8 @@
 'use server'
 
 import { Resend } from 'resend'
+import { render } from '@react-email/render'
+import { WelcomeEmail } from '@/components/email-templates'
 
 // Resend utilities for audience management and transactional emails
 // Handles adding users to audiences AND sending welcome emails
@@ -183,84 +185,47 @@ export async function sendWelcomeEmail(
     const fromEmail = process.env.RESEND_FROM_EMAIL || 'brandon@dripdrop.social'
     const fromName = process.env.RESEND_FROM_NAME || 'DripDrop'
 
+    // Render React Email template to HTML
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'
+    const emailHtml = await render(WelcomeEmail({
+      firstName: emailData.firstName,
+      email: emailData.email,
+      baseUrl
+    }))
+
     // Send welcome email
     const resend = getResendClient()
     const result = await resend.emails.send({
       from: `${fromName} <${fromEmail}>`,
       to: [emailData.email],
-      subject: 'Welcome to DripDrop - Get Started Today!',
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Welcome to DripDrop</title>
-        </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white; border-radius: 10px 10px 0 0;">
-            <h1 style="margin: 0; font-size: 28px;">Welcome to DripDrop!</h1>
-          </div>
-          
-          <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
-            <h2 style="color: #333; margin-top: 0;">Hello ${emailData.firstName || 'there'}!</h2>
-            
-            <p>Thank you for joining DripDrop! We're thrilled to have you as part of our growing community.</p>
-            
-            <p><strong>What's next?</strong></p>
-            <ul>
-              <li>Complete your profile to connect with others</li>
-              <li>Explore the DripDrop ecosystem</li>
-              <li>Start building your decentralized social presence</li>
-            </ul>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/wallet" 
-                 style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">
-                Get Started Now
-              </a>
-            </div>
-            
-            <p>If you have any questions, feel free to reach out to our support team.</p>
-            
-            <p>Best regards,<br>
-            <strong>The DripDrop Team</strong></p>
-            
-            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-            
-            <p style="font-size: 12px; color: #666;">
-              This email was sent to ${emailData.email} because you signed up for DripDrop.<br>
-              <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/unsubscribe?email=${encodeURIComponent(emailData.email)}" 
-                 style="color: #667eea;">Unsubscribe</a> | 
-              <a href="${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/privacy" 
-                 style="color: #667eea;">Privacy Policy</a>
-            </p>
-          </div>
-        </body>
-        </html>
-      `,
-      text: `
-Welcome to DripDrop, ${emailData.firstName || 'there'}!
+      subject: 'Welcome to DripDrop!',
+      html: emailHtml,
+      text: `Welcome to DripDrop!
 
-Thank you for joining DripDrop! We're thrilled to have you as part of our growing community.
+Thank you for joining DripDrop! We're thrilled to have you as part of our growing community building the future of decentralized social networking.
 
-What's next?
-- Complete your profile to connect with others
-- Explore the DripDrop ecosystem  
-- Start building your decentralized social presence
+You've successfully reserved your spot for the TestFlight beta. Here's what happens next:
 
-Get started: ${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/wallet
+📱 TestFlight Invite: You'll receive your beta access TestFlight email
+🌐 Decentralized Social: Connect without centralized control
+🔐 Own Your Data: Your content, your rules, your ownership
+💫 MySocial Network: Part of the larger decentralized ecosystem
 
-If you have any questions, feel free to reach out to our support team.
+While you wait for your TestFlight invite, follow us on social media for the latest updates and sneak peeks of what's coming:
 
-Best regards,
+- X (Twitter): https://x.com/dripdrop_social
+- Telegram: https://t.me/dripdrop_social
+
+Questions? Feel free to reach out to us on X or Telegram.
+
+Talk soon,
 The DripDrop Team
 
 ---
-This email was sent to ${emailData.email} because you signed up for DripDrop.
-Unsubscribe: ${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/unsubscribe?email=${encodeURIComponent(emailData.email)}
-Privacy Policy: ${process.env.NEXT_PUBLIC_BASE_URL || 'https://dripdrop.social'}/privacy
-      `.trim()
+This email was sent to ${emailData.email} because you signed up for DripDrop TestFlight access.
+Unsubscribe: ${baseUrl}/unsubscribe?email=${encodeURIComponent(emailData.email)}
+Privacy Policy: ${baseUrl}/privacy
+dripdrop.social`
     })
 
     if (result.error) {
