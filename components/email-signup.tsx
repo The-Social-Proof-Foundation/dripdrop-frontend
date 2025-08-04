@@ -11,7 +11,6 @@ import { useTheme } from "next-themes"
 
 export function EmailSignup() {
   const [email, setEmail] = useState("")
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isValid, setIsValid] = useState(true)
   const [message, setMessage] = useState("")
@@ -59,7 +58,6 @@ export function EmailSignup() {
         
         setEmail("")
         setMessage("")
-        setIsSubmitted(true)
       } else {
         setMessage(result.error || "Something went wrong. Please try again.")
         setIsValid(false)
