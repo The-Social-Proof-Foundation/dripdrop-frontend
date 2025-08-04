@@ -198,7 +198,7 @@ export async function sendWelcomeEmail(
     const result = await resend.emails.send({
       from: `${fromName} <${fromEmail}>`,
       to: [emailData.email],
-      subject: 'Welcome to DripDrop!',
+      subject: 'Welcome to DripDrop! - TestFlight Invites Coming Soon',
       html: emailHtml,
       text: `Welcome to DripDrop!
 

@@ -56,12 +56,7 @@ export function WelcomeEmail({
         {/* Main content */}
         <Section style={content}>        
         <Text style={paragraph}>
-            Thank you for joining DripDrop! We&apos;re thrilled to have you as part of our growing community 
-            building the future of decentralized social networking.
-        </Text>
-
-        <Text style={paragraph}>
-            You&apos;ve successfully reserved your spot for the TestFlight beta. Here&apos;s what happens next:
+            Thank you for joining DripDrop! You&apos;ve successfully reserved your spot for the TestFlight beta.
         </Text>
 
         <Text style={paragraph}>
@@ -156,9 +151,7 @@ const headerSubtitle = {
 
 const content = {
   backgroundColor: '#f8fafc',
-  borderRadius: '0 0 12px 12px',
   padding: '32px',
-  border: '1px solid #e2e8f0',
   borderTop: 'none',
 }
 
@@ -196,7 +189,6 @@ const signature = {
 }
 
 const hr = {
-  borderColor: '#e2e8f0',
   margin: '24px 0',
 }
 

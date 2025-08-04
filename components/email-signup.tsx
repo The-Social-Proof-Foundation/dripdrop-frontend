@@ -53,7 +53,7 @@ export function EmailSignup() {
       if (response.ok && result.success) {
         // Show professional toast notification
         toast.success("🎉 You're all set!", {
-          description: "Welcome to DripDrop! Check your email for exclusive updates.",
+          description: "Welcome to DripDrop! Check your email for updates.",
           duration: 4000,
         })
         
