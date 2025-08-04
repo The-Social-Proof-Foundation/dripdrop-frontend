@@ -36,15 +36,15 @@ export function WelcomeEmail({
         <Section style={header}>
             <Img
               src="https://dripdrop.social/dripdrop-silhouette-black-sm.png"
-              width="40"
-              height="48"
+              width="44"
+              height="52"
               alt="DripDrop Icon"
               style={silhouetteLogo}
             />
             <Img
               src="https://dripdrop.social/dripdrop-horizontal-black-sm.png"
-              width="160"
-              height="38"
+              width="240"
+              height="57"
               alt="DripDrop"
               style={horizontalLogo}
             />
@@ -64,45 +64,32 @@ export function WelcomeEmail({
             You&apos;ve successfully reserved your spot for the TestFlight beta. Here&apos;s what happens next:
         </Text>
 
-        {/* Feature highlights */}
-        <Section style={featuresSection}>
-            <Text style={featureItem}>
-            📱 <strong>TestFlight Invite:</strong> You&apos;ll receive your beta access soon
-            </Text>
-            <Text style={featureItem}>
-            🌐 <strong>Decentralized Social:</strong> Connect without centralized control
-            </Text>
-            <Text style={featureItem}>
-            🔐 <strong>Own Your Data:</strong> Your content, your rules, your ownership
-            </Text>
-            <Text style={featureItem}>
-            💫 <strong>MySocial Network:</strong> Part of the larger decentralized ecosystem
-            </Text>
-        </Section>
-
         <Text style={paragraph}>
             While you wait for your TestFlight invite, follow us on social media for the latest updates 
             and sneak peeks of what&apos;s coming.
         </Text>
 
-        {/* Social Links */}
-        <Section style={socialSection}>
-            <Link href="https://x.com/dripdrop_social" style={socialLink}>
-            X (Twitter)
-            </Link>
-            <Text style={socialDivider}>•</Text>
-            <Link href="https://t.me/dripdrop_social" style={socialLink}>
-            Telegram
-            </Link>
-        </Section>
-
         <Text style={paragraph}>
             Questions? Feel free to reach out to us on X or Telegram.
         </Text>
 
+        {/* Social Links */}
+        <Section style={socialSection}>
+            <Link href="https://x.com/dripdrop_social" style={socialLink}>
+              X (Twitter)
+            </Link>
+            <Text style={socialDivider}>•</Text>
+            <Link href="https://t.me/dripdrop_social" style={socialLink}>
+              Telegram
+            </Link>
+            <Link href="https://www.mysocial.network/ecosystem/dripdrop" style={socialLink}>
+                MySocial
+            </Link>
+        </Section>
+
         <Text style={signature}>
             Talk soon,<br />
-            The DripDrop Team
+            <strong>The DripDrop Team</strong>
         </Text>
         </Section>
 
@@ -144,11 +131,9 @@ const container = {
 }
 
 const header = {
-  backgroundColor: '#ffffff',
-  borderRadius: '12px 12px 0 0',
+  backgroundColor: '#f8fafc',
   padding: '40px 32px',
   textAlign: 'center' as const,
-  border: '1px solid #e2e8f0',
   borderBottom: 'none',
 }
 
@@ -162,35 +147,19 @@ const horizontalLogo = {
   display: 'block',
 }
 
-const headerTitle = {
-  color: '#1e293b',
-  fontSize: '28px',
-  fontWeight: '700',
-  lineHeight: '1.3',
-  margin: '0 0 8px',
-}
-
 const headerSubtitle = {
-  color: '#000000',
+  color: '#969696',
   fontSize: '16px',
   lineHeight: '1.4',
   margin: '0',
 }
 
 const content = {
-  backgroundColor: '#ffffff',
+  backgroundColor: '#f8fafc',
   borderRadius: '0 0 12px 12px',
   padding: '32px',
   border: '1px solid #e2e8f0',
   borderTop: 'none',
-}
-
-const mainHeading = {
-  color: '#1e293b',
-  fontSize: '24px',
-  fontWeight: '600',
-  lineHeight: '1.3',
-  margin: '0 0 24px',
 }
 
 const paragraph = {
@@ -200,63 +169,27 @@ const paragraph = {
   margin: '0 0 20px',
 }
 
-const featuresSection = {
-  margin: '24px 0',
-  padding: '20px',
-  backgroundColor: '#f8fafc',
-  borderRadius: '8px',
-  border: '1px solid #e2e8f0',
-}
-
-const featureItem = {
-  color: '#475569',
-  fontSize: '15px',
-  lineHeight: '1.6',
-  margin: '0 0 12px',
-  lastChild: {
-    marginBottom: '0',
-  },
-}
-
-const buttonContainer = {
-  textAlign: 'center' as const,
-  margin: '32px 0',
-}
-
-const button = {
-  backgroundColor: '#667eea',
-  borderRadius: '8px',
-  color: '#ffffff',
-  fontSize: '16px',
-  fontWeight: '600',
-  textDecoration: 'none',
-  textAlign: 'center' as const,
-  display: 'inline-block',
-  padding: '14px 28px',
-  lineHeight: '1.4',
-}
-
 const socialSection = {
   textAlign: 'center' as const,
   margin: '24px 0',
 }
 
 const socialLink = {
-  color: '#667eea',
+  color: '#568BEF',
   fontSize: '14px',
   textDecoration: 'none',
   fontWeight: '500',
 }
 
 const socialDivider = {
-  color: '#94a3b8',
+  color: '#000000',
   fontSize: '14px',
   margin: '0 8px',
   display: 'inline',
 }
 
 const signature = {
-  color: '#475569',
+  color: '#000000',
   fontSize: '16px',
   lineHeight: '1.6',
   margin: '32px 0 0',
