@@ -148,14 +148,14 @@ export async function smartAddContactToResend(
     }
 
     // Check if contact already exists
-    const contactExists = await checkContactExists(contact.email, audienceId)
+    // const contactExists = await checkContactExists(contact.email, audienceId)
     
-    if (contactExists) {
-      return {
-        success: true,
-        message: 'Already in audience!'
-      }
-    }
+    // if (contactExists) {
+    //   return {
+    //     success: true,
+    //     message: 'Already in audience!'
+    //   }
+    // }
     
     // Contact doesn't exist, add them
     return await addContactToResend(contact, audienceId)
