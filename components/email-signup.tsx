@@ -91,7 +91,7 @@ export function EmailSignup() {
                 setEmail(e.target.value)
                 setIsValid(true)
               }}
-              className={`pl-10 ${
+              className={`pl-10 border-border placeholder:text-muted-foreground ${
                 !isValid ? "border-red-500 focus:border-red-500" : ""
               }`}
               required

@@ -25,7 +25,7 @@ export function WelcomeEmail({
   email,
   baseUrl = 'https://dripdrop.social'
 }: WelcomeEmailProps) {
-  const previewText = `Welcome to DripDrop!`
+  const previewText = `Welcome to DripDrop! - TestFlight Invites Coming Soon`
 
   return (
     <Html>
@@ -171,7 +171,7 @@ const headerTitle = {
 }
 
 const headerSubtitle = {
-  color: '#64748b',
+  color: '#000000',
   fontSize: '16px',
   lineHeight: '1.4',
   margin: '0',
