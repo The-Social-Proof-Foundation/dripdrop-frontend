@@ -1,0 +1,23 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "TEV97DGLYR.com.projectyz.app",
+          "TEV97DGLYR.com.projectyz.dev"
+        ],
+        "components": [
+          {
+            "/": "/auth/callback"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "TEV97DGLYR.com.projectyz.app",
+      "TEV97DGLYR.com.projectyz.dev"
+    ]
+  }
+}
