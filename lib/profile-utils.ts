@@ -1,4 +1,5 @@
 import { Ed25519Keypair } from '@socialproof/mys/keypairs/ed25519'
+import { fetchProfileByAddressGraphql } from '@/lib/profile-graphql'
 
 // Profile creation data interface
 interface ProfileCreationData {
@@ -45,6 +46,9 @@ export interface MySocialProfile {
   reddit_username: string | null
   github_username: string | null
   block_list_address: string | null
+  reservation_pool_address: string | null
+  social_proof_token_address: string | null
+  reservation_fill_percent: number | null
 }
 
 // Google user info interface (from useGoogleAuth)
@@ -56,15 +60,75 @@ interface GoogleUserInfo {
   family_name?: string
 }
 
-// MySocial indexing API endpoints
-export const SOCIAL_INDEX_API = 'https://mys-social-indexer-testnet.up.railway.app'
+// MySocial indexing API — username → address only. Matches mysocial-frontend testnet.
+export const SOCIAL_INDEX_API = 'https://social.testnet.mysocial.network'
+
+function profileLookupUrl(slug: string): string {
+  const trimmed = slug.trim()
+  if (typeof window !== 'undefined') {
+    return `/api/profile/${encodeURIComponent(trimmed)}`
+  }
+
+  if (/^0x[a-fA-F0-9]{64}$/.test(trimmed)) {
+    return `${SOCIAL_INDEX_API}/profiles/address/${trimmed}`
+  }
+
+  return `${SOCIAL_INDEX_API}/profiles/username/${encodeURIComponent(trimmed)}`
+}
 
 /**
- * Fetch a MySocial profile by address
+ * Fetch a MySocial profile by address via GraphQL.
+ * @deprecated Prefer `fetchProfileByAddressGraphql` from `@/lib/profile-graphql`.
  */
 export async function fetchMySocialProfile(address: string): Promise<MySocialProfile | null> {
+  return fetchProfileByAddressGraphql(address)
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === 'object' ? (value as Record<string, unknown>) : null
+}
+
+function firstString(...values: unknown[]): string | null {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim()) return value.trim()
+  }
+  return null
+}
+
+function parseProfileResponse(profileData: unknown): MySocialProfile | null {
+  const data = asRecord(profileData)
+  if (!data || data.error) return null
+
+  const ownerAddress = firstString(
+    data.owner_address,
+    data.ownerAddress,
+    data.wallet_address,
+    data.walletAddress,
+    data.address,
+  )
+  if (!ownerAddress) return null
+
+  return {
+    ...(data as unknown as MySocialProfile),
+    owner_address: ownerAddress,
+    username:
+      firstString(data.username, data.user_name, data.handle) ??
+      (data as unknown as MySocialProfile).username ??
+      null,
+  }
+}
+
+/**
+ * Fetch a MySocial profile by username
+ */
+export async function fetchMySocialProfileByUsername(
+  username: string,
+): Promise<MySocialProfile | null> {
+  const handle = username.trim().replace(/^@/, '')
+  if (!handle) return null
+
   try {
-    const response = await fetch(`${SOCIAL_INDEX_API}/profiles/address/${address}`, {
+    const response = await fetch(profileLookupUrl(handle), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -72,29 +136,44 @@ export async function fetchMySocialProfile(address: string): Promise<MySocialPro
     })
 
     if (response.status === 404) {
-      console.log('MySocial profile not found for address:', address)
       return null
     }
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch profile: ${response.statusText}`)
+      return null
     }
 
     const profileData = await response.json()
-    
-    // Check if the response contains an error (API returns {"error":"Profile not found"} with 200 status)
-    if (profileData && typeof profileData === 'object' && profileData.error) {
-      console.log('MySocial profile not found for address:', address, '- API returned error:', profileData.error)
-      return null
-    }
-    
-    console.log('MySocial profile fetched successfully:', profileData)
-    return profileData
-    
-  } catch (error) {
-    console.error('Error fetching MySocial profile:', error)
+    return parseProfileResponse(profileData)
+  } catch {
     return null
   }
+}
+
+/**
+ * Resolve a username to an owner address via the Social Indexer REST API.
+ */
+export async function resolveAddressFromUsername(username: string): Promise<string | null> {
+  const profile = await fetchMySocialProfileByUsername(username)
+  return profile?.owner_address ?? null
+}
+
+/**
+ * Resolve a URL slug to a profile (wallet address or username).
+ * GraphQL is the primary source; REST indexer is used only for username → address.
+ */
+export async function resolveProfileFromSlug(slug: string): Promise<MySocialProfile | null> {
+  const trimmed = slug.trim().replace(/^@/, '')
+  if (!trimmed) return null
+
+  if (/^0x[a-fA-F0-9]{64}$/.test(trimmed)) {
+    return fetchProfileByAddressGraphql(trimmed)
+  }
+
+  const address = await resolveAddressFromUsername(trimmed)
+  if (!address) return null
+
+  return fetchProfileByAddressGraphql(address)
 }
 
 /**
@@ -181,7 +260,7 @@ export function getCoverPhoto(mysocialProfile: MySocialProfile | null): string {
   if (mysocialProfile?.cover_photo) {
     return mysocialProfile.cover_photo
   }
-  return "/default-cover.jpg"
+  return '/default-cover.webp'
 }
 
 /**

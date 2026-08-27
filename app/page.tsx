@@ -4,8 +4,9 @@ import { useState } from "react"
 import Script from "next/script"
 import { motion } from "framer-motion"
 import { Footer } from "@/components/footer"
-import { EmailSignup } from "@/components/email-signup"
+import { HomeWaitlistCta } from "@/components/waitlist/home-waitlist-cta"
 import { ScrollSmootherWrapper } from "@/components/scroll-smoother"
+import { getVideoDurationLabel } from "@/lib/video-config"
 
 export default function Home() {
   const [splineLoaded, setSplineLoaded] = useState(false)
@@ -69,18 +70,18 @@ export default function Home() {
                   delay: 0.9
                 }}
               >
-                  {/* <h1 className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl mb-4 md:mb-6 lg:mb-8 text-foreground select-text pointer-events-auto">
+                  {/* <h1 className="font-sans font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl mb-4 md:mb-6 lg:mb-8 text-foreground select-text pointer-events-auto">
                     Short-form videos,
                     <br />  
-                    <span className="font-quicksand font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl">that you actually own.</span>
+                    <span className="font-sans font-bold text-3xl md:text-5xl lg:text-6xl xl:text-7xl">that you actually own.</span>
                   </h1> */}
 
-                  <p className="font-quicksand font-semibold pt-[140px] md:pt-0 text-sm md:text-base text-muted-foreground mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
-                    We&apos;re building the most fun 12-second video economy, all on-chain. <br className="hidden md:inline" />Featuring Social Proof Tokens, fair ownership, & unlimited ways to earn.
+                  <p className="font-sans font-semibold pt-[140px] md:pt-0 text-sm md:text-base text-muted-foreground mb-6 max-w-sm md:max-w-xl lg:max-w-2xl mx-auto select-text pointer-events-auto">
+                    We&apos;re building the most fun {getVideoDurationLabel()} video economy, all on-chain. <br className="hidden md:inline" />Featuring Social Proof Tokens, fair ownership, & unlimited ways to earn.
                   </p>
               </motion.div>
 
-              {/* Email Signup */}
+              {/* Waitlist CTA */}
               <motion.div 
                 className="pointer-events-auto"
                 initial={{ opacity: 0, y: 30 }}
@@ -91,13 +92,12 @@ export default function Home() {
                   delay: 1.1
                 }}
               >
-                <EmailSignup />
+                <HomeWaitlistCta />
               </motion.div>
             </div>
           </motion.div>
         </div>
 
-        {/* Footer */}
         <Footer />
       </main>
     </ScrollSmootherWrapper>

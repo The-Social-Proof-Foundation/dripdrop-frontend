@@ -63,7 +63,7 @@ export function CookieConsent() {
             >
               {region === 'EU' ? 'Accept' : 'Okay'}
             </Button>
-            <p className="text-xs text-[var(--primary)] font-quicksand font-medium">
+            <p className="text-xs text-[var(--primary)] font-sans font-medium">
               {getMessage()}
             </p>
           </div>

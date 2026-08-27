@@ -7,6 +7,10 @@ export async function GET() {
     resendFromName: !!process.env.RESEND_FROM_NAME,
     resendAudienceId: !!process.env.RESEND_AUDIENCE_ID,
     baseUrl: !!process.env.NEXT_PUBLIC_BASE_URL,
+    dripdropApiUrl: !!(process.env.DRIPDROP_API_URL || process.env.NEXT_PUBLIC_DRIPDROP_API_URL),
+    mysocialAuthHost: !!process.env.NEXT_PUBLIC_MYSOCIAL_AUTH_HOST,
+    mysocialSaltUrl: !!process.env.NEXT_PUBLIC_MYSOCIAL_SALT_URL,
+    authClientId: !!process.env.NEXT_PUBLIC_AUTH_CLIENT_ID,
   }
 
   const allConfigured = Object.values(envStatus).every(Boolean)

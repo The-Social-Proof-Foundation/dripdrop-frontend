@@ -9,9 +9,17 @@ interface ThemeLogoProps {
   size?: number
   className?: string
   alt?: string
+  /** Light-mode horizontal wordmark asset (default gray). */
+  horizontalVariant?: 'gray' | 'black'
 }
 
-export function ThemeLogo({ type, size = 32, className = '', alt }: ThemeLogoProps) {
+export function ThemeLogo({
+  type,
+  size = 32,
+  className = '',
+  alt,
+  horizontalVariant = 'gray',
+}: ThemeLogoProps) {
   const { theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -34,8 +42,8 @@ export function ThemeLogo({ type, size = 32, className = '', alt }: ThemeLogoPro
   const currentTheme = resolvedTheme || theme
   const isLight = currentTheme === 'light'
   
-  const logoSrc = isLight 
-    ? `/dripdrop-${type}-gray-sm.png`
+  const logoSrc = isLight
+    ? `/dripdrop-${type}-${type === 'silhouette' ? 'black' : horizontalVariant}-sm.png`
     : `/dripdrop-${type}-white-sm.png`
 
   const logoAlt = alt || `DripDrop ${type === 'silhouette' ? 'Logo' : 'Brand'}`

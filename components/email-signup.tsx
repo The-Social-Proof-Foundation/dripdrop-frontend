@@ -1,5 +1,6 @@
 "use client"
 
+/** @deprecated Replaced by components/waitlist/waitlist-signup.tsx (MySocial Auth + backend waitlist). */
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

@@ -9,7 +9,6 @@ import { Transaction } from '@socialproof/mys/transactions'
 import { getMysClient } from '@/lib/myso-client'
 import { fromB64 } from '@socialproof/mys/utils'
 import * as bip39 from 'bip39'
-import { processEmailSignup } from '@/lib/resend'
 
 // Auth method type - added 'base' for Base network wallet connections and 'imported' for imported wallets
 type AuthMethod = 'google' | 'imported' | 'base' | 'wallet' | null
@@ -70,9 +69,7 @@ export function useUniversalAuth(): UniversalAuthState {
   const [importedAddress, setImportedAddress] = useState<string | null>(null)
   const [importedKeypair, setImportedKeypair] = useState<Ed25519Keypair | null>(null)
   
-  // SendGrid tracking for welcome emails
-  const isProcessingWelcomeEmail = useRef(false)
-  const processedUsers = useRef(new Set<string>())
+  // Welcome email is handled by backend POST /user/session after MySocial Auth (waitlist flow).
   
   // Check for existing imported wallet on mount
   useEffect(() => {
@@ -268,16 +265,6 @@ export function useUniversalAuth(): UniversalAuthState {
       localStorage.removeItem(cacheKey)
     }
     
-    // Clear welcome email tracking for this user
-    if (authMethod === 'google' && googleUserInfo) {
-      const userIdentifier = googleUserInfo.email || currentAddress
-      const welcomeEmailKey = `mysocial_welcome_email_sent_${userIdentifier}`
-      localStorage.removeItem(welcomeEmailKey)
-      if (userIdentifier) {
-        processedUsers.current.delete(userIdentifier)
-      }
-    }
-    
     // Sign out from Google if authenticated with Google OAuth
     if (authMethod === 'google') {
       signOutGoogle()
@@ -315,79 +302,6 @@ export function useUniversalAuth(): UniversalAuthState {
       setNeedsProfileCreation(false)
     }
   }, [currentAddress, isAuthenticated, authMethod])
-
-  // Effect: Handle welcome email for Google Auth users (single call after successful auth)
-  useEffect(() => {
-    const handleWelcomeEmail = async () => {
-      // Only process Google Auth users with valid data
-      if (authMethod !== 'google' || !googleUserInfo || !currentAddress) {
-        return
-      }
-
-      // Prevent multiple simultaneous processing
-      if (isProcessingWelcomeEmail.current) {
-        return
-      }
-
-      // Create unique identifier for this user (use email or address)
-      const userIdentifier = googleUserInfo.email || currentAddress
-      
-      // Skip if already processed this user
-      if (processedUsers.current.has(userIdentifier)) {
-        return
-      }
-
-      // Check localStorage for previous welcome email tracking
-      const welcomeEmailKey = `mysocial_welcome_email_sent_${userIdentifier}`
-      if (localStorage.getItem(welcomeEmailKey)) {
-        processedUsers.current.add(userIdentifier)
-        return
-      }
-
-      // Ensure we have email before proceeding
-      if (!googleUserInfo.email) {
-        console.warn('⚠️ No email found in Google user info, skipping welcome email')
-        return
-      }
-
-      // Process welcome email for new Google Auth user
-      isProcessingWelcomeEmail.current = true
-
-      try {
-        const result = await processEmailSignup(
-          googleUserInfo.email,
-          googleUserInfo.given_name,
-          googleUserInfo.family_name
-        )
-
-        if (result.emailSent.success) {
-          // Mark as completed to prevent future attempts
-          localStorage.setItem(welcomeEmailKey, new Date().toISOString())
-          processedUsers.current.add(userIdentifier)
-          
-          if (result.emailSent.message === 'Welcome email skipped - user already welcomed') {
-            console.log('ℹ️ User already welcomed, skipping duplicate email')
-          } else {
-            console.log('✅ Welcome email sent.')
-          }
-        } else {
-          console.warn('⚠️ Welcome email failed:', result.emailSent.message)
-        }
-
-        // Contact addition is optional - log only if failed
-        if (!result.contactAdded.success) {
-          console.log('ℹ️ Contact list subscription skipped (optional feature)')
-        }
-
-      } catch (error) {
-        console.error('❌ Welcome email processing error:', error)
-      } finally {
-        isProcessingWelcomeEmail.current = false
-      }
-    }
-
-    handleWelcomeEmail()
-  }, [authMethod, googleUserInfo, currentAddress])
 
   // Import wallet from mnemonic phrase
   const importWalletFromMnemonic = async (mnemonic: string) => {

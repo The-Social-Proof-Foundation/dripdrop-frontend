@@ -1,9 +1,22 @@
 /** @type {import('next').NextConfig} */
+const backendUrl =
+  process.env.DRIPDROP_API_URL ||
+  process.env.NEXT_PUBLIC_DRIPDROP_API_URL ||
+  'http://127.0.0.1:5050'
+
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
+  async rewrites() {
+    return [
+      {
+        source: '/api/backend/:path*',
+        destination: `${backendUrl.replace(/\/$/, '')}/:path*`,
+      },
+    ]
+  },
   async headers() {
     return [
       {
@@ -17,29 +30,20 @@ const nextConfig = {
       },
     ]
   },
-  // Ensure API routes work properly in production
   serverExternalPackages: ['resend'],
-  // Webpack configuration to fix module loading issues
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Fix for __webpack_modules__ issues
-    config.optimization = {
-      ...config.optimization,
-      moduleIds: 'deterministic',
-    }
-    
-    // Ensure proper module resolution
+  transpilePackages: ['@socialproof/myso'],
+  webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       net: false,
       tls: false,
     }
-    
+
     return config
   },
-  // Experimental features that might help with module loading
   experimental: {
-    optimizePackageImports: ['@splinetool/runtime'],
+    optimizePackageImports: ['@splinetool/runtime', '@socialproof/myso'],
   },
 };
 

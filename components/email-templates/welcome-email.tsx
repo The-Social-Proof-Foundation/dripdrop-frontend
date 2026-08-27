@@ -13,6 +13,7 @@ import {
   Text,
 } from '@react-email/components'
 import * as React from 'react'
+import { getVideoDurationLabel } from '@/lib/video-config'
 
 export interface WelcomeEmailProps {
   firstName?: string
@@ -49,7 +50,7 @@ export function WelcomeEmail({
               style={horizontalLogo}
             />
         <Text style={headerSubtitle} className="text-center max-w-md mx-auto">
-            The most fun 12-second video economy, all on-chain.
+            The most fun {getVideoDurationLabel()} video economy, all on-chain.
         </Text>
         </Section>
 
@@ -116,7 +117,7 @@ export function WelcomeEmail({
 // Styles
 const main = {
   backgroundColor: '#f8fafc',
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  fontFamily: 'Manrope, Plus Jakarta Sans, Geist, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
 }
 
 const container = {

@@ -10,18 +10,15 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        // System fonts (reliable fallbacks)
-        'sans': ['Inter', 'system-ui', 'sans-serif'],
-        'serif': ['Georgia', 'serif'],
-        'mono': ['JetBrains Mono', 'Monaco', 'Cascadia Code', 'Fira Code', 'monospace'],
-        
-        // Modern web fonts (can be easily added/removed)
-        'display': ['Cal Sans', 'Inter', 'system-ui', 'sans-serif'],
-        'body': ['Inter', 'system-ui', 'sans-serif'],
-        'heading': ['Inter', 'system-ui', 'sans-serif'],
-        
-        // Custom fonts (add your branded fonts here)
-        'quicksand': ['Quicksand', 'Inter', 'system-ui', 'sans-serif'],
+        // Primary: Manrope. Switch back via `--font-jakarta` or `--font-geist` (see lib/fonts.ts).
+        sans: ['var(--font-manrope)', 'var(--font-jakarta)', 'var(--font-geist)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-manrope)', 'var(--font-jakarta)', 'var(--font-geist)', 'system-ui', 'sans-serif'],
+        body: ['var(--font-manrope)', 'var(--font-jakarta)', 'var(--font-geist)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-manrope)', 'var(--font-jakarta)', 'var(--font-geist)', 'system-ui', 'sans-serif'],
+        manrope: ['var(--font-manrope)', 'system-ui', 'sans-serif'],
+        jakarta: ['var(--font-jakarta)', 'system-ui', 'sans-serif'],
+        geist: ['var(--font-geist)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'JetBrains Mono', 'monospace'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

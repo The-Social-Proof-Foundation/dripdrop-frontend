@@ -1,91 +1,91 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { ApolloProvider, ApolloClient } from '@apollo/client';
-import Cookies from 'js-cookie';
-import { createApolloClient } from './apollo-client';
-import { toast } from 'sonner';
+'use client'
 
-type NetworkType = 'mainnet' | 'testnet' | 'localnet';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+  useMemo,
+  useCallback,
+} from 'react'
+import { flushSync } from 'react-dom'
+import Cookies from 'js-cookie'
+import { resetMySoGraphQLClient } from '@/lib/myso-graphql-client'
+import type { NetworkType } from '@/lib/network-utils'
+import { toast } from 'sonner'
 
 interface NetworkContextType {
-  currentNetwork: NetworkType;
-  changeNetwork: (network: NetworkType) => void;
-  isChangingNetwork: boolean;
+  currentNetwork: NetworkType
+  changeNetwork: (network: NetworkType) => void
+  isChangingNetwork: boolean
+  isNetworkHydrated: boolean
 }
 
 const NetworkContext = createContext<NetworkContextType>({
-  currentNetwork: 'localnet',
+  currentNetwork: 'testnet',
   changeNetwork: () => {},
-  isChangingNetwork: false
-});
+  isChangingNetwork: false,
+  isNetworkHydrated: false,
+})
 
-export const useNetwork = () => useContext(NetworkContext);
+export const useNetwork = () => useContext(NetworkContext)
 
 interface NetworkProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export const NetworkProvider: React.FC<NetworkProviderProps> = ({ children }) => {
-  // Get initial network from cookie
-  const getInitialNetwork = (): NetworkType => {
-    const savedNetwork = Cookies.get('selectedNetwork');
-    if (savedNetwork === 'mainnet' || savedNetwork === 'testnet' || savedNetwork === 'localnet') {
-      return savedNetwork;
-    }
-    return 'localnet';
-  };
+  const [currentNetwork, setCurrentNetwork] = useState<NetworkType>('testnet')
+  const [isChangingNetwork, setIsChangingNetwork] = useState(false)
+  const [isNetworkHydrated, setIsNetworkHydrated] = useState(false)
 
-  const [currentNetwork, setCurrentNetwork] = useState<NetworkType>(getInitialNetwork());
-  const [isChangingNetwork, setIsChangingNetwork] = useState(false);
-  const [client, setClient] = useState<ApolloClient<any>>(() => createApolloClient());
-
-  // Set default cookie if not present
   useEffect(() => {
-    if (!Cookies.get('selectedNetwork')) {
-      Cookies.set('selectedNetwork', 'localnet', { expires: 365 });
+    const savedNetwork = Cookies.get('selectedNetwork')
+    if (savedNetwork === 'mainnet' || savedNetwork === 'testnet' || savedNetwork === 'localnet') {
+      setCurrentNetwork(savedNetwork)
+    } else {
+      Cookies.set('selectedNetwork', 'testnet', { expires: 365 })
     }
-  }, []);
+    setIsNetworkHydrated(true)
+  }, [])
 
-  // Handle network change
-  const changeNetwork = async (network: NetworkType) => {
-    if (isChangingNetwork || network === currentNetwork) return;
-    
-    setIsChangingNetwork(true);
-    
-    try {
-      console.log(`Network change requested to: ${network}`);
-      
-      // Update the cookie FIRST
-      Cookies.set('selectedNetwork', network, { expires: 365 });
-      console.log(`Cookie updated to network: ${network}`);
-      
-      // Update UI state
-      setCurrentNetwork(network);
-      
-      // Create a brand new Apollo client with the new network endpoint
-      const newClient = createApolloClient();
-      setClient(newClient);
-      
-      // Show successful update notification
-      const networkNames = {
-        'mainnet': 'Mainnet',
-        'testnet': 'Testnet',
-        'localnet': 'Localnet'
-      };
-      
-      toast.success(`Network changed to ${networkNames[network]}`);
-    } catch (error) {
-      console.error('Error changing network:', error);
-      toast.error('Failed to change network');
-    } finally {
-      setIsChangingNetwork(false);
-    }
-  };
+  const changeNetwork = useCallback(
+    async (network: NetworkType) => {
+      if (isChangingNetwork || network === currentNetwork) return
 
-  return (
-    <NetworkContext.Provider value={{ currentNetwork, changeNetwork, isChangingNetwork }}>
-      <ApolloProvider client={client}>
-        {children}
-      </ApolloProvider>
-    </NetworkContext.Provider>
-  );
-}; 
+      setIsChangingNetwork(true)
+
+      try {
+        flushSync(() => {
+          Cookies.set('selectedNetwork', network, { expires: 365 })
+          resetMySoGraphQLClient()
+          setCurrentNetwork(network)
+        })
+
+        const networkNames = {
+          mainnet: 'Mainnet',
+          testnet: 'Testnet',
+          localnet: 'Localnet',
+        }
+
+        toast.success(`Network changed to ${networkNames[network]}`)
+      } catch (error) {
+        console.error('Error changing network:', error)
+        toast.error('Failed to change network')
+      } finally {
+        queueMicrotask(() => setIsChangingNetwork(false))
+      }
+    },
+    [currentNetwork, isChangingNetwork],
+  )
+
+  const contextValue = useMemo(
+    () => ({ currentNetwork, changeNetwork, isChangingNetwork, isNetworkHydrated }),
+    [currentNetwork, changeNetwork, isChangingNetwork, isNetworkHydrated],
+  )
+
+  return <NetworkContext.Provider value={contextValue}>{children}</NetworkContext.Provider>
+}
+
+export type { NetworkType }

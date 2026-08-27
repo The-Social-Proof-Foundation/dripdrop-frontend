@@ -1,5 +1,9 @@
 'use client'
 
+/**
+ * @deprecated Use MySocial Auth via hooks/useMySocialAuth and lib/mysocial-auth-client instead.
+ * Direct Google OAuth is no longer used on the landing page.
+ */
 import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { Ed25519Keypair } from '@socialproof/mys/keypairs/ed25519'
