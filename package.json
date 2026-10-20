@@ -44,6 +44,7 @@
     "@react-email/render": "^1.1.4",
     "@socialproof/mys": "^0.0.1",
     "@socialproof/myso": "0.0.4",
+    "@socialproof/mysocial-auth": "^0.12.4",
     "@splinetool/runtime": "^1.10.37",
     "@tanstack/react-query": "^5.101.4",
     "@types/react-dom": "18.2.7",

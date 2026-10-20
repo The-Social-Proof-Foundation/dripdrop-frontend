@@ -3,7 +3,10 @@ export async function POST(request: Request) {
       const body = await request.json()
       
       // Use HTTP for MySocial testnet to avoid SSL issues
-      const mysocialFullnode = process.env.NEXT_PUBLIC_MYS_FULLNODE || 'http://fullnode.testnet.mysocial.network:9000'
+      const mysocialFullnode =
+        process.env.NEXT_PUBLIC_MYSO_FULLNODE ||
+        process.env.NEXT_PUBLIC_MYS_FULLNODE ||
+        'http://fullnode.testnet.mysocial.network:9000'
       
       console.log('🔍 [Fullnode Proxy] Request Details:')
       console.log('  Target:', mysocialFullnode)

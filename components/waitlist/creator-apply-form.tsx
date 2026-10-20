@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { useMySocialAuth } from '@/hooks/useMySocialAuth'
+import { getApiAccessToken } from '@/lib/mysocial-session'
 import { toast } from 'sonner'
 
 export function CreatorApplyForm() {
@@ -25,11 +26,13 @@ export function CreatorApplyForm() {
 
     setIsSubmitting(true)
     try {
+      const token = await getApiAccessToken()
+      if (!token) throw new Error('Your session expired. Sign in again.')
       const res = await fetch('/api/creator-application', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.sessionAccessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           walletAddress: session.user.address,

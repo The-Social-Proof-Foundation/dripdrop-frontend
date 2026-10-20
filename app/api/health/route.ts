@@ -11,6 +11,7 @@ export async function GET() {
     mysocialAuthHost: !!process.env.NEXT_PUBLIC_MYSOCIAL_AUTH_HOST,
     mysocialSaltUrl: !!process.env.NEXT_PUBLIC_MYSOCIAL_SALT_URL,
     authClientId: !!process.env.NEXT_PUBLIC_AUTH_CLIENT_ID,
+    zkloginProverUrl: !!(process.env.MYSO_ZKLOGIN_PROVER_URL || process.env.ZKLOGIN_PROVER_URL),
   }
 
   const allConfigured = Object.values(envStatus).every(Boolean)

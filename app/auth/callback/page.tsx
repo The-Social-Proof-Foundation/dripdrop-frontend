@@ -1,65 +1,35 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2 } from 'lucide-react'
-import {
-  getExpectedAuthPending,
-  consumeAuthPending,
-  consumeAuthReturnTo,
-} from '@/lib/mysocial-auth-config'
-import { parseAuthCallback, MySocialAuthError } from '@/lib/mysocial-auth-client'
-import { saveSession } from '@/lib/mysocial-session'
+import { consumeAuthReturnTo } from '@/lib/mysocial-auth-config'
+import { clearLoginCelebration } from '@/lib/login-celebration'
+import { completeZkLoginRedirect } from '@/lib/zklogin/login'
 
 export default function AuthCallbackPage() {
   const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    let cancelled = false
+
     async function handleCallback() {
       try {
-        const pending = getExpectedAuthPending()
-        if (!pending) {
-          throw new MySocialAuthError('Authentication session expired. Please try again.')
-        }
-
-        const session = parseAuthCallback(
-          window.location.href,
-          pending.state,
-          pending.nonce
-        )
-        consumeAuthPending()
-        saveSession(session)
-
-        const returnTo = consumeAuthReturnTo()
-        router.replace(returnTo)
+        await completeZkLoginRedirect()
+        if (!cancelled) router.replace(consumeAuthReturnTo())
       } catch (err) {
-        consumeAuthPending()
+        clearLoginCelebration()
         const message =
-          err instanceof MySocialAuthError
-            ? err.message
-            : 'Authentication failed. Please try again.'
-        setError(message)
+          err instanceof Error && err.message ? err.message : 'Authentication failed. Please try again.'
         sessionStorage.setItem('waitlist_auth_error', message)
-        router.replace('/login')
+        if (!cancelled) router.replace('/login')
       }
     }
 
-    handleCallback()
+    void handleCallback()
+    return () => {
+      cancelled = true
+    }
   }, [router])
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500 text-sm">{error}</p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-3">
-      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      <p className="text-sm text-muted-foreground">Signing you in...</p>
-    </div>
-  )
+  return <div className="min-h-screen" />
 }

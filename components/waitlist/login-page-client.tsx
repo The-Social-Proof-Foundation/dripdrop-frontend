@@ -38,7 +38,10 @@ export function LoginPageClient() {
   }, [isAuthenticated, isLoading, safeNextPath, router])
 
   const handleSignIn = (provider: MySocialProvider) => {
-    signIn(provider, safeNextPath)
+    setAuthError(null)
+    signIn(provider, safeNextPath).catch((err: unknown) => {
+      setAuthError(err instanceof Error && err.message ? err.message : 'Could not start sign-in. Please try again.')
+    })
   }
 
   if (isLoading || isAuthenticated) {

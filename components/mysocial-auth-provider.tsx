@@ -6,19 +6,21 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react'
 import { usePathname } from 'next/navigation'
 import type { MySocialProvider } from '@/lib/mysocial-auth-config'
 import { MYSOCIAL_AUTH_CHANGED_EVENT } from '@/lib/mysocial-auth-events'
-import { startSignIn, type MySocialSession } from '@/lib/mysocial-auth-client'
 import {
-  clearSession,
+  getValidSession,
   loadStoredSession,
-  saveSession,
   signOutSession,
+  type MySocialSession,
 } from '@/lib/mysocial-session'
+import { startZkLoginRedirect } from '@/lib/zklogin/login'
+import { LoginStatusOverlay } from '@/components/providers/login-status-overlay'
 import { useMySocialProfile } from '@/hooks/useMySocialProfile'
 import type { MySocialProfile } from '@/lib/profile-utils'
 
@@ -33,8 +35,6 @@ interface MySocialAuthContextValue {
   refreshProfile: () => void
   signIn: (provider: MySocialProvider, returnTo?: string) => Promise<void>
   signOut: () => Promise<void>
-  setAuthenticatedSession: (next: MySocialSession) => void
-  clearLocalSession: () => void
 }
 
 const MySocialAuthContext = createContext<MySocialAuthContextValue | null>(null)
@@ -43,41 +43,40 @@ export function MySocialAuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const [session, setSession] = useState<MySocialSession | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const syncId = useRef(0)
 
-  const syncSession = useCallback(() => {
-    setSession(loadStoredSession())
+  const syncSession = useCallback(async () => {
+    const id = ++syncId.current
+    let next: MySocialSession | null
+    try {
+      next = await getValidSession()
+    } catch {
+      // Refresh failed without revoking the session; keep what is stored and retry on the next sync.
+      next = loadStoredSession()
+    }
+    if (id !== syncId.current) return
+    setSession(next)
     setIsLoading(false)
   }, [])
 
   useEffect(() => {
-    syncSession()
+    void syncSession()
   }, [syncSession, pathname])
 
   useEffect(() => {
-    const handleAuthChanged = () => syncSession()
+    const handleAuthChanged = () => void syncSession()
     window.addEventListener(MYSOCIAL_AUTH_CHANGED_EVENT, handleAuthChanged)
     return () => window.removeEventListener(MYSOCIAL_AUTH_CHANGED_EVENT, handleAuthChanged)
   }, [syncSession])
 
   const signIn = useCallback(async (provider: MySocialProvider, returnTo?: string) => {
-    await startSignIn(provider, returnTo)
+    await startZkLoginRedirect(provider, returnTo)
   }, [])
 
   const signOut = useCallback(async () => {
-    const current = session ?? loadStoredSession()
-    await signOutSession(current)
+    await signOutSession()
     setSession(null)
     window.location.href = '/'
-  }, [session])
-
-  const setAuthenticatedSession = useCallback((next: MySocialSession) => {
-    saveSession(next)
-    setSession(next)
-  }, [])
-
-  const clearLocalSession = useCallback(() => {
-    clearSession()
-    setSession(null)
   }, [])
 
   const address = session?.user.address ?? null
@@ -100,8 +99,6 @@ export function MySocialAuthProvider({ children }: { children: ReactNode }) {
       refreshProfile,
       signIn,
       signOut,
-      setAuthenticatedSession,
-      clearLocalSession,
     }),
     [
       session,
@@ -113,13 +110,14 @@ export function MySocialAuthProvider({ children }: { children: ReactNode }) {
       refreshProfile,
       signIn,
       signOut,
-      setAuthenticatedSession,
-      clearLocalSession,
     ],
   )
 
   return (
-    <MySocialAuthContext.Provider value={value}>{children}</MySocialAuthContext.Provider>
+    <MySocialAuthContext.Provider value={value}>
+      {children}
+      <LoginStatusOverlay isAuthenticated={!!session} isAuthResolving={isLoading} />
+    </MySocialAuthContext.Provider>
   )
 }
 

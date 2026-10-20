@@ -110,6 +110,9 @@ importers:
       '@socialproof/myso':
         specifier: 0.0.4
         version: 0.0.4(typescript@5.8.3)
+      '@socialproof/mysocial-auth':
+        specifier: ^0.12.4
+        version: 0.12.4
       '@splinetool/runtime':
         specifier: ^1.10.37
         version: 1.12.98
@@ -1617,6 +1620,9 @@ packages:
   '@socialproof/myso@0.0.4':
     resolution: {integrity: sha512-3SbHrYfv9JdoFQuKAcdWXPUc7viVeMtkmm2/fnQiK7lvg0kmFKt00JEt1apDlG1T0ltPv/uMYUv3hL+cerRDyQ==}
     engines: {node: '>=22'}
+
+  '@socialproof/mysocial-auth@0.12.4':
+    resolution: {integrity: sha512-f+1gmaES8to4w1AhoXxyOT637KYBcsWswxwBaGMvpaJl3+6clkYvEl99jZatWuMqXXou88hu23Pe+bjlj4R7Ng==}
 
   '@socialproof/utils@0.0.0':
     resolution: {integrity: sha512-ZCGpfvLs1EwP2smcXOutWDaClYaI0qfwHzgL0omdpVCMj0irnvdmNu6DddIwrxNFoM495+dljdcb6rPrS4omvQ==}
@@ -5269,6 +5275,10 @@ snapshots:
       - '@gql.tada/svelte-support'
       - '@gql.tada/vue-support'
       - typescript
+
+  '@socialproof/mysocial-auth@0.12.4':
+    dependencies:
+      '@socialproof/utils': 0.0.2
 
   '@socialproof/utils@0.0.0':
     dependencies:

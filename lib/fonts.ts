@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Manrope, Plus_Jakarta_Sans } from 'next/font/google'
+import { Geist, Geist_Mono, Manrope, Plus_Jakarta_Sans, Space_Grotesk } from 'next/font/google'
 
 /**
  * Primary UI font (#1). To switch back, change `sans`/`body`/`heading` in tailwind.config.ts:
@@ -39,9 +39,19 @@ export const geistMono = Geist_Mono({
   preload: true,
 })
 
+/** Sign-in status label (`font-space-grotesk`), matching MySocial. */
+export const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif'],
+})
+
 export const fontVariables = [
   manrope.variable,
   plusJakartaSans.variable,
   geist.variable,
   geistMono.variable,
+  spaceGrotesk.variable,
 ].join(' ')

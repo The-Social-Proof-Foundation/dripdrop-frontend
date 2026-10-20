@@ -18,6 +18,7 @@ const config: Config = {
         manrope: ['var(--font-manrope)', 'system-ui', 'sans-serif'],
         jakarta: ['var(--font-jakarta)', 'system-ui', 'sans-serif'],
         geist: ['var(--font-geist)', 'system-ui', 'sans-serif'],
+        'space-grotesk': ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)', 'JetBrains Mono', 'monospace'],
       },
       backgroundImage: {

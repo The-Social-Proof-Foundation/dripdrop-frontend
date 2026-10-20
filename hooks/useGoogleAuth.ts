@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * @deprecated Use MySocial Auth via hooks/useMySocialAuth and lib/mysocial-auth-client instead.
+ * @deprecated Use MySocial Auth via hooks/useMySocialAuth and lib/zklogin/login instead.
  * Direct Google OAuth is no longer used on the landing page.
  */
 import { useEffect, useState, useRef } from 'react'

@@ -5,7 +5,7 @@ import type {
   WaitlistProgram,
   WaitlistStatus,
 } from './waitlist-types'
-import { getValidSession } from './mysocial-session'
+import { getApiAccessToken } from './mysocial-session'
 
 function getBackendUrl(): string {
   // Browser calls same-origin proxy; Next rewrites to DRIPDROP_API_URL server-side.
@@ -42,11 +42,11 @@ async function apiFetch<T>(
   }
 
   if (auth) {
-    const session = await getValidSession()
-    if (!session) {
+    const token = await getApiAccessToken()
+    if (!token) {
       throw new DripdropApiError('Not authenticated', 401)
     }
-    headers.Authorization = `Bearer ${session.sessionAccessToken}`
+    headers.Authorization = `Bearer ${token}`
   }
 
   if (init.body && !headers['Content-Type']) {
