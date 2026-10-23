@@ -7,6 +7,9 @@ import { getVideoDurationLabel } from '@/lib/video-config';
 export const metadata: Metadata = {
   title: 'DripDrop - Join the Waitlist',
   description: `Join the early access waitlist for the most fun ${getVideoDurationLabel()} video economy, all on-chain.`,
+  icons: {
+    icon: '/dripdrop-silhouette-black-sm.ico',
+  },
 };
 
 export default function RootLayout({

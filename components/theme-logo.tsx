@@ -42,9 +42,10 @@ export function ThemeLogo({
   const currentTheme = resolvedTheme || theme
   const isLight = currentTheme === 'light'
   
+  const ext = type === 'silhouette' ? 'svg' : 'png'
   const logoSrc = isLight
-    ? `/dripdrop-${type}-${type === 'silhouette' ? 'black' : horizontalVariant}-sm.png`
-    : `/dripdrop-${type}-white-sm.png`
+    ? `/dripdrop-${type}-${type === 'silhouette' ? 'black' : horizontalVariant}-sm.${ext}`
+    : `/dripdrop-${type}-white-sm.${ext}`
 
   const logoAlt = alt || `DripDrop ${type === 'silhouette' ? 'Logo' : 'Brand'}`
 

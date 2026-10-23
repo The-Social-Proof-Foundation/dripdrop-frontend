@@ -3,24 +3,27 @@
 import { useTheme } from 'next-themes'
 import { useEffect } from 'react'
 
+const FAVICON = {
+  light: '/dripdrop-silhouette-black-sm.ico',
+  dark: '/dripdrop-silhouette-white-sm.ico',
+} as const
+
 export default function ThemeFavicon() {
-  const { theme } = useTheme()
+  const { resolvedTheme, theme } = useTheme()
 
   useEffect(() => {
-    const favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement || document.createElement('link')
-    favicon.type = 'image/svg+xml'
-    favicon.rel = 'icon'
-    favicon.href = '/dripdrop-silhouette-white-sm.png'
-    if (theme === 'dark') {
-      favicon.href = '/dripdrop-silhouette-white-sm.png'
-    } else if (theme === 'light') {
-      favicon.href = '/dripdrop-silhouette-black-sm.png'
-    } else {
-      favicon.href = '/dripdrop-silhouette-white-sm.png'
-    }
+    const current = resolvedTheme || theme
+    if (current !== 'light' && current !== 'dark') return
 
+    const href = current === 'light' ? FAVICON.light : FAVICON.dark
+    document.querySelectorAll("link[rel='icon']").forEach((node) => node.remove())
+
+    const favicon = document.createElement('link')
+    favicon.rel = 'icon'
+    favicon.type = 'image/x-icon'
+    favicon.href = href
     document.head.appendChild(favicon)
-  }, [theme])
+  }, [resolvedTheme, theme])
 
   return null
-} 
+}

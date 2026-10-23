@@ -74,7 +74,7 @@ export function EmailSignup() {
 
   // Determine MySo logo based on theme with proper fallback
   const currentTheme = mounted ? (resolvedTheme || theme || 'light') : 'light'
-  const mysoLogo = currentTheme === 'light' ? '/MySo-logo-black.png' : '/MySo-logo-white.png'
+  const mysoLogo = currentTheme === 'light' ? '/MySo-logo-black.svg' : '/MySo-logo-white.svg'
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-xl mx-auto">

@@ -36,7 +36,7 @@ export function WelcomeEmail({
         {/* Header with logo stack */}
         <Section style={header}>
             <Img
-              src="https://dripdrop.social/dripdrop-silhouette-black-sm.png"
+              src="https://dripdrop.social/dripdrop-silhouette-black-sm.svg"
               width="44"
               height="52"
               alt="DripDrop Icon"
